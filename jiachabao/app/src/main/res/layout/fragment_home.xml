@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    tools:context=".home.HomeFragment">
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/rl_refresh"
+        android:visibility="visible"
+        android:scrollbars="none"
+        android:dividerHeight="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrHeaderBackground="#FFFFFF"
+        ptr:ptrHeaderTextColor="#999999">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_f0f0f0"
+            android:orientation="vertical">
+                <com.youth.banner.Banner
+                    android:id="@+id/bannar_at"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"/>
+                <LinearLayout
+                    android:background="@color/color_ffffff"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/ll_imitation_trading"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:src="@mipmap/home_icon"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="15sp"
+                            android:textColor="@color/color_333333"
+                            android:textSize="14sp"
+                            android:text="模拟交易"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novice_room"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:src="@mipmap/home_icon2"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="15sp"
+                            android:textColor="@color/color_333333"
+                            android:textSize="14sp"
+                            android:text="新手学堂"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_customer_service"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:src="@mipmap/home_icon3"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="15sp"
+                            android:textColor="@color/color_333333"
+                            android:textSize="14sp"
+                            android:text="客服咨询"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:background="@color/color_ffffff"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="26px"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <View
+                            android:background="@color/color_fa6268"
+                            android:layout_width="6px"
+                            android:layout_height="40px" />
+                        <TextView
+                            android:layout_marginLeft="25px"
+                            android:textColor="@color/color_333333"
+                            android:text="交易品种"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <ListView
+                        android:id="@+id/lv_trading_list"
+                        android:scrollbars="none"
+                        android:divider="#00000000"
+                        android:overScrollMode="never"
+                        android:dividerHeight="0.5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+        </LinearLayout>
+
+</com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
+</layout>
+
+

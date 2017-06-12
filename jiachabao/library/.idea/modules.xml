@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Project.iml" filepath="$PROJECT_DIR$/../Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SHSegmentControl/SHSegmentControl.iml" filepath="$PROJECT_DIR$/../SHSegmentControl/SHSegmentControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../app/app.iml" filepath="$PROJECT_DIR$/../app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library.iml" filepath="$PROJECT_DIR$/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../org.eclipse.paho.android.service/org.eclipse.paho.android.service.iml" filepath="$PROJECT_DIR$/../org.eclipse.paho.android.service/org.eclipse.paho.android.service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../photogallery/photogallery.iml" filepath="$PROJECT_DIR$/../photogallery/photogallery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pickerView/pickerView.iml" filepath="$PROJECT_DIR$/../pickerView/pickerView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SwipeMenuListView/swipeMenuListView.iml" filepath="$PROJECT_DIR$/../SwipeMenuListView/swipeMenuListView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../universalvideoview/universalvideoview.iml" filepath="$PROJECT_DIR$/../universalvideoview/universalvideoview.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:background="@color/color_ffffff"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_gravity="left|center"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="67dp">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_symbol_name"
+                android:text="美元指数"
+                android:textSize="17sp"
+                android:textColor="@color/color_333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:padding="3dp"
+                android:id="@+id/tv_open_status_text"
+                android:background="@drawable/trading_status_n"
+                android:textColor="@color/color_999999"
+                android:layout_marginLeft="10px"
+                android:textSize="10sp"
+                android:text="交易中"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_introduce"
+            android:layout_marginTop="20px"
+            android:textColor="@color/color_999999"
+            android:textSize="12sp"
+            android:text="波幅巨大,交易火爆"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_gravity="right|center"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_nowv"
+            android:textSize="17sp"
+            android:textColor="@color/color_1dbd7d"
+            android:text="97.710"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_updownrate"
+            android:textSize="17sp"
+            android:layout_marginLeft="20px"
+            android:textColor="@color/color_1dbd7d"
+            android:text="-0.02%"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_gravity="bottom|center"
+        android:background="@color/color_e8e8e8"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+
+</FrameLayout>

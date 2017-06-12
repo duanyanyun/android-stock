@@ -1,0 +1,112 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".stock.TimeStockFragment">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="212dp">
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/lc_time_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:id="@+id/tv_max_curp"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginTop="15dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_fa6268"
+                        android:layout_gravity="top|left"
+                        android:text="98.045"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_max_updown"
+                        android:layout_marginRight="17dp"
+                        android:layout_marginTop="15dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_fa6268"
+                        android:layout_gravity="top|right"
+                        android:text="0.00%"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_min_curp"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_00be7b"
+                        android:layout_gravity="bottom|left"
+                        android:text="97.045"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_min_updown"
+                        android:layout_marginRight="17dp"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_00be7b"
+                        android:layout_gravity="bottom|right"
+                        android:text="-0.00%"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </FrameLayout>
+                
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="87.5dp">
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/bc_time_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_999999"
+                        android:id="@+id/tv_max_cur_volume"
+                        android:layout_gravity="top|left"
+                        android:layout_marginLeft="17dp"
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_gravity="bottom|left"
+                        android:text="手"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="10sp"
+                        android:textColor="@color/color_999999"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="79.5dp"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:id="@+id/ll_time_tab"
+                android:gravity="center"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" >
+
+            </LinearLayout>
+        <!--</ScrollView>-->
+    </FrameLayout>
+</layout>
+
+

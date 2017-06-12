@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.jiachabao.project.com"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //dexOptions{
+    //incremental true
+    //javaMaxHeapSize "4g"
+    //关闭预编译
+    //preDexLibraries = false
+    //}
+
+    dataBinding {
+        enabled = true
+    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    /**/
+    compile "com.google.guava:guava:$rootProject.guavaVersion"
+    compile "io.reactivex:rxjava:$rootProject.rxjavaVersion"
+    compile "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
+    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    compile "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
+    /**/
+
+    //图片轮播控件
+    compile "com.youth.banner:banner:$rootProject.bannerVersion"
+    /**/
+
+    //加载网络图片
+    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    /**/
+
+    //下拉刷新上啦加载更多
+    //compile "cn.bingoogolapple:bga-refreshlayout:$rootProject.refreshVersion"
+    compile project(':library')
+    /**/
+    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
+    /**/
+    testCompile 'junit:junit:4.12'
+    /**/
+    //MPAndroidChart报表图
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    /**/
+
+}

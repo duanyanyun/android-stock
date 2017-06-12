@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#212124</color>
+    <color name="colorPrimaryDark">#212124</color>
+    <color name="colorAccent">#212124</color>
+
+    <color name="colorHomeTabH">#d1ad61</color>
+    <color name="colorHomeTabN">#333333</color>
+    <color name="colorHomeTabBackground">#f9f9f9</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_f0f0f0">#f0f0f0</color>
+    <color name="color_ffffff">#ffffff</color>
+    <color name="color_fa6268">#fa6268</color>
+
+    <color name="color_999999">#999999</color>
+    <color name="color_1dbd7d">#1dbd7d</color>
+    <color name="color_00be7b">#00be7b</color>
+
+    <color name="color_e8e8e8">#e8e8e8</color>
+    <color name="color_d3bf8d">#d3bf8d</color>
+
+    <color name="color_4e66a9">#4e66a9</color>
+    <color name="color_f4f4f4">#f4f4f4</color>
+    <color name="color_f3f3f3">#f3f3f3</color>
+    <color name="color_00ffffff">#00ffffff</color>
+
+    <color name="minute_blue">#00D0FC</color>
+</resources>

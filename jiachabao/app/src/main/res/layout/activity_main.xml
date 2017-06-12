@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jiachabao.project.com.MainActivity">
+    <LinearLayout
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.jiachabao.project.com.component.view.NoScrollViewPager
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
+        <LinearLayout
+            android:background="@color/colorHomeTabBackground"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="48dp">
+
+            <FrameLayout
+                android:paddingTop="5dp"
+                android:id="@+id/fl_tab_home"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_tab_home"
+                    android:src="@drawable/icon_tab_index"
+                    android:layout_gravity="top|center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_tab_home"
+                    android:textSize="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="bottom|center"
+                    android:textColor="@color/colorHomeTabN"
+                    android:text="首页"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:paddingTop="5dp"
+                android:id="@+id/fl_tab_trading"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_tab_trading"
+                    android:src="@drawable/icon_tab_trading"
+                    android:layout_gravity="top|center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_tab_trading"
+                    android:textSize="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="bottom|center"
+                    android:textColor="@color/colorHomeTabN"
+                    android:text="交易"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:paddingTop="5dp"
+                android:id="@+id/fl_tab_my"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_tab_my"
+                    android:src="@drawable/icon_tab_my"
+                    android:layout_gravity="top|center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_tab_my"
+                    android:textSize="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="bottom|center"
+                    android:textColor="@color/colorHomeTabN"
+                    android:text="我的"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
+
+
