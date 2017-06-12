@@ -45,7 +45,7 @@ public class TradingFragment extends Fragment {
         list.add("05:00");
         textScrollView.setLineCount(1260);
         textScrollView.setLabels(list);
-
+   
         initData();
         return view;
     }
