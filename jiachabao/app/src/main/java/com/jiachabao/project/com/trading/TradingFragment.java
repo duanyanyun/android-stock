@@ -1,7 +1,6 @@
 package com.jiachabao.project.com.trading;
 
 
-import android.databinding.tool.util.L;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,18 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.jiachabao.project.com.R;
 import com.jiachabao.project.com.component.view.LineCharView;
-import com.jiachabao.project.com.component.view.TextScrollView;
 import com.jiachabao.project.com.data.HttpResult;
 import com.jiachabao.project.com.data.Minutes;
 import com.jiachabao.project.com.data.StockModel;
 import com.jiachabao.project.com.data.source.repository.StockModelRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import rx.Subscriber;
 
@@ -36,23 +31,23 @@ public class TradingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          view = inflater.inflate(R.layout.fragment_trading, container, false);
-        textScrollView= (LineCharView)view.findViewById(R.id.tsv_view);
-        ArrayList<String> list=new ArrayList<>();
-        list.add("08:00");
-        list.add("13:00");
-        list.add("18:00");
-        list.add("23:00");
-        list.add("05:00");
-        textScrollView.setLineCount(1260);
-        textScrollView.setLabels(list);
-    
-        initData();
+//        textScrollView= (LineCharView)view.findViewById(R.id.tsv_view);
+//        ArrayList<String> list=new ArrayList<>();
+//        list.add("08:00");
+//        list.add("13:00");
+//        list.add("18:00");
+//        list.add("23:00");
+//        list.add("05:00");
+//        textScrollView.setLineCount(1260);
+//        textScrollView.setLabels(list);
+//
+//        initData();
         return view;
     }
 
     private void  initData(){
         stockModelRepository= StockModelRepository.getInstance(view.getContext());
-        stockModelRepository.getStockModel("","9.9.9","775","0",String.valueOf(4918),"0","2").subscribe(new Subscriber<HttpResult<StockModel<Minutes>>>() {
+        stockModelRepository.getStockModel("","9.9.9","775","0",String.valueOf(4925),"0","2").subscribe(new Subscriber<HttpResult<StockModel<Minutes>>>() {
             @Override
             public void onCompleted() {
 
@@ -69,7 +64,7 @@ public class TradingFragment extends Fragment {
                 float minUpdown=0,maxUpdown=0,barMax=0;
                 for (int i=data.size()-1,j=0;i>=0;i--,j++){
                     Minutes stock= data.get(i);
-                    float curp=Float.valueOf(stock.curp)/1000;
+                    float curp=Float.valueOf(stock.curp)/100;
                     curps.add(curp);
                     if(i==0){
                         minUpdown=curp;

@@ -5,7 +5,7 @@
     android:background="#ffffff"
     android:padding="10dp"
     tools:context=".trading.TradingFragment">
-    <com.jiachabao.project.com.component.view.LineCharView
+    <com.jiachabao.project.com.component.view.TextKLineCharView
         android:id="@+id/tsv_view"
         android:background="@color/color_999999"
         android:layout_width="match_parent"

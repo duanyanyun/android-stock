@@ -5,6 +5,7 @@
     android:padding="10dp"
     tools:context="com.jiachabao.project.com.user.UserFragment">
     <com.jiachabao.project.com.component.view.KLineCharView
+        android:id="@+id/klcv_char_view"
         android:layout_width="match_parent"
         android:layout_height="350dp"/>
 </FrameLayout>

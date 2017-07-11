@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.jiachabao.project.com.data.HttpResult;
+import com.jiachabao.project.com.data.KLine;
+import com.jiachabao.project.com.data.KLineModel;
 import com.jiachabao.project.com.data.Minutes;
 import com.jiachabao.project.com.data.StockModel;
 import com.jiachabao.project.com.data.source.remote.HomeRemoteDataSource;
@@ -38,6 +40,11 @@ public class StockModelRepository {
     public Observable<HttpResult<StockModel<Minutes>>> getStockModel(String usertoken,String version,String packtype,String proxyid,String contractid,String count,String ba){
         return stockModelRemoteDataSource.getStockModel(usertoken,version,packtype,proxyid,contractid,count,ba);
     }
+
+    public Observable<HttpResult<KLineModel<KLine>>> getKLineStockModel(String usertoken, String version, String packtype, String proxyid, String contractid, String count, String type){
+        return stockModelRemoteDataSource.getKLineStockModel(usertoken,version,packtype,proxyid,contractid,count,type);
+    }
+
 
     public Observable<HttpResult<StockModel<Minutes>>> getStockModel(String usertoken,String version,String packtype,String proxyid,String contractid,String count,String ba,String time){
         return stockModelRemoteDataSource.getStockModel(usertoken,version,packtype,proxyid,contractid,count,ba,time);

@@ -3,6 +3,8 @@ package com.jiachabao.project.com.data.source.interfaces;
 import android.support.annotation.NonNull;
 
 import com.jiachabao.project.com.data.HttpResult;
+import com.jiachabao.project.com.data.KLine;
+import com.jiachabao.project.com.data.KLineModel;
 import com.jiachabao.project.com.data.Minutes;
 import com.jiachabao.project.com.data.StockModel;
 
@@ -24,5 +26,14 @@ public interface IStockModelService {
                                                               @NonNull String contractid,
                                                               @NonNull String count,
                                                               @NonNull String ba);
+
+    //获取当前股票信息
+    Observable<HttpResult<KLineModel<KLine>>> getKLineStockModel(@NonNull String usertoken,
+                                                                 @NonNull String version,
+                                                                 @NonNull String packtype,
+                                                                 @NonNull String proxyid,
+                                                                 @NonNull String contractid,
+                                                                 @NonNull String count, @NonNull String type);
+
 
 }
