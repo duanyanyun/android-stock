@@ -28,11 +28,12 @@ public abstract class ScrollAndScaleView extends RelativeLayout implements
     //是否在触摸中
     protected boolean touch = false;
 
-    protected float mScaleX = 1;
+    protected float mScaleX = 1.2f;
     //x轴最大的缩放程度
     protected float mScaleXMax = 3f;
     //x轴最小的缩放程度
     protected float mScaleXMin = 0.8f;
+
 
     private boolean mMultipleTouch=false;
 

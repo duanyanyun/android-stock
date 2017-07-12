@@ -24,7 +24,10 @@ import com.jiachabao.project.com.R;
 import com.jiachabao.project.com.data.KLine;
 import com.jiachabao.project.com.util.DisplayUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,6 +82,11 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
     protected Paint mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     //x轴的偏移量
     protected float mTranslateX = Float.MIN_VALUE;
+    //item竖虚线间隔
+    protected int dottedLine=25;
+    //间隔占整个item的比率
+    private float itemInterval=0.1f;
+
 
     //显示区域中X开始点在数组的位置
     protected int mStartIndex = 0;
@@ -153,6 +161,15 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 barMax=Math.max(Float.valueOf(model.curVol), barMax);
             }
             setMaxCurp(Float.valueOf(maxUpdown),Float.valueOf(minUpdown),barMax,maxPreClose);
+
+            // 虚线画笔
+            float line= DisplayUtil.px2dip(getContext(),4);
+            dottedPaint.setStyle(Paint.Style.STROKE);
+            dottedPaint.setColor(gridColor);
+            dottedPaint.setStrokeWidth(1);
+            PathEffect effects = new DashPathEffect(new float[] {line, line, line, line}, 1);
+            dottedPaint.setPathEffect(effects);
+
             Log.d("测试K",mStartIndex+":----------------:"+mStopIndex);
             for (int i = mStartIndex; i <= mStopIndex; i++) {
                 float currentPointX = getX(i);
@@ -188,17 +205,50 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 if(y1==y){
                     y=y+1;
                 }
-                float s1=columnSpace*0.2f;
+                float s1=columnSpace*itemInterval;
                 canvas.drawRect(lastX+s1,y1, lastX+(columnSpace-s1*2), y, kLinePaint);
                 float s2= ((columnSpace-s1*2)-s1)/2;
                 //Log.d("测试K","*----------------s1:"+s1+"  s2:"+s2);
                 canvas.drawLine(lastX+s1+s2,y2, lastX+s1+s2, y3, kLinePaint);
+                if(i%dottedLine==0){
+                    //横线虚线
+                    Path path = new Path();
+                    path.moveTo(lastX+s1+s2, 1);
+                    path.lineTo(lastX+s1+s2,lineHeight);
+                    canvas.drawPath(path,dottedPaint);
+
+                    textPaint.setColor(gridColor);
+                    textPaint.setTextSize(12f);
+                    Rect rect = new Rect();
+                    String time=dateTimeToString(model.timeStamp);
+                    textPaint.getTextBounds(time, 0, 1, rect);
+                    canvas.drawText(time, lastX+s1+s2, lineHeight+clearanceHeight, textPaint);
+
+                    Path path1 = new Path();
+                    path1.moveTo(lastX+s1+s2, lineHeight+labelHeight+tabHeight);
+                    path1.lineTo(lastX+s1+s2,viewHeight);
+                    canvas.drawPath(path1,dottedPaint);
+
+                }
+
             }
 
         }
 
     }
 
+
+    public String dateTimeToString(String time){
+        SimpleDateFormat format =  new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat format1 =  new SimpleDateFormat("HH:mm");
+        try {
+            Date date = format.parse(time);
+            return format1.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  "";
+    }
     public float getX(int position) {
         if(mXs==null||mXs.size()<=0){
             return 0;
