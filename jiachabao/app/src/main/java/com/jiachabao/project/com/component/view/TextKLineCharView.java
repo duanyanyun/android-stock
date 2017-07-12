@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.animation.AnimationUtils;
 
 import com.jiachabao.project.com.util.DisplayUtil;
 
@@ -38,7 +39,7 @@ public class TextKLineCharView extends ScrollAndScaleView {
     protected Paint mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     //x轴的偏移量
     protected float mTranslateX = Float.MIN_VALUE;
-    private float mOverScrollRange = 0;
+
     //显示区域中X开始点在数组的位置
     protected int mStartIndex = 0;
     //显示区域中X结束点在数组的位置
@@ -55,7 +56,7 @@ public class TextKLineCharView extends ScrollAndScaleView {
         setWillNotDraw(false);
         mDetector = new GestureDetectorCompat(getContext(), this);
         mScaleDetector = new ScaleGestureDetector(getContext(), this);
-        mOverScrollRange= DisplayUtil.dip2px(getContext(),100);
+
 
     }
 

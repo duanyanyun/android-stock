@@ -1,12 +1,16 @@
 package com.jiachabao.project.com.trading;
 
 
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.jiachabao.project.com.R;
 import com.jiachabao.project.com.component.view.LineCharView;
@@ -42,6 +46,16 @@ public class TradingFragment extends Fragment {
 //        textScrollView.setLabels(list);
 //
 //        initData();
+
+        final ImageView imageView=(ImageView)view.findViewById(R.id.iv_view);
+        final Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.img_animation);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.startAnimation(animation);
+            }
+        });
+
         return view;
     }
 

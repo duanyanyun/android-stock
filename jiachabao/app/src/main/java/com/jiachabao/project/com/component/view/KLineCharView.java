@@ -31,7 +31,7 @@ import java.util.List;
  * Created by Loki on 2017/6/13.
  */
 
-public class KLineCharView extends RelativeLayout implements View.OnClickListener, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
+public class KLineCharView extends ScrollAndScaleView implements View.OnClickListener {
     private  Context mContext;
     public KLineCharView(Context context) {
         super(context);
@@ -76,19 +76,27 @@ public class KLineCharView extends RelativeLayout implements View.OnClickListene
     private int selectTabIndex=1;
     private float maxPoint=0,minPoint=0,maxBar=0;
     private ArrayList<KLine> arrList;
-    private List<Float> listX=new ArrayList<>();
-    private List<Float> listY=new ArrayList<>();
-    protected GestureDetectorCompat mDetector;
-    protected ScaleGestureDetector mScaleDetector;
-    private OverScroller mScroller;
+    protected Paint mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    //x轴的偏移量
+    protected float mTranslateX = Float.MIN_VALUE;
+
+    //显示区域中X开始点在数组的位置
+    protected int mStartIndex = 0;
+    //显示区域中X结束点在数组的位置
+    protected int mStopIndex = 0;
+    private List<Float> mXs=new ArrayList<Float>();
+    private int mItemCount=0;
+    private float columnSpace=10;
+    private float mDataLen;
+    //长按之后选择的点的序号
+    protected int mSelectedIndex;
 
 
     private void init(){
         setWillNotDraw(false);
+
         mDetector = new GestureDetectorCompat(getContext(), this);
         mScaleDetector = new ScaleGestureDetector(getContext(), this);
-        mScroller = new OverScroller(getContext());
-
 
         viewTab = LayoutInflater.from(getContext()).inflate(R.layout.layout_stock_tab, null, false);
         viewTab.findViewById(R.id.tv_vol_tab).setOnClickListener(this);
@@ -103,30 +111,34 @@ public class KLineCharView extends RelativeLayout implements View.OnClickListene
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        mStartIndex = indexOfTranslateX(xToTranslateX(0));
+        mStopIndex = indexOfTranslateX(xToTranslateX(viewWidth));
+
         canvas.save();
         drawGrid(canvas);
         drawText(canvas);
+        canvas.translate(mTranslateX * mScaleX, 0);
+        canvas.scale(mScaleX, 1);
         drawValue(canvas);
         canvas.restore();
     }
 
     private void drawValue(Canvas canvas) {
-        listX.clear();
-        listY.clear();
-        float startX=0,startY=0;
-        if(arrList!=null&&itemCount<=arrList.size()){
-            int startIndex=arrList.size()-itemCount;
+        if(itemCount<=0){
+            return;
+        }
+        if(arrList!=null){
             float lineH=lineHeight-(clearanceHeight*2);
-            float itemW=(Float.valueOf(viewWidth)/Float.valueOf(this.itemCount));
             float minUpdown=0,maxUpdown=0,barMax=0,maxPreClose=0;
-            for (int i=0;i<itemCount;i++) {
-                KLine model=arrList.get(startIndex+i);
+            for (int j = mStartIndex,k=0; j <= mStopIndex; j++,k++) {
+                KLine model=arrList.get(j);
                 float curp2=Float.valueOf(model.preClose)/100;
                 float value=Float.valueOf(model.openp)/100;
                 float value1=Float.valueOf(model.nowv)/100;
                 float value2=Float.valueOf(model.lowp)/100;
                 float value3=Float.valueOf(model.highp)/100;
-                if(i==0){
+                if(k==0){
                     minUpdown=value;
                 }
                 minUpdown=Math.min(value, minUpdown);
@@ -137,21 +149,24 @@ public class KLineCharView extends RelativeLayout implements View.OnClickListene
                 maxUpdown=Math.max(value2, maxUpdown);
                 minUpdown=Math.min(value3, minUpdown);
                 maxUpdown=Math.max(value3, maxUpdown);
-
                 maxPreClose=Math.max(curp2, maxPreClose);
                 barMax=Math.max(Float.valueOf(model.curVol), barMax);
             }
             setMaxCurp(Float.valueOf(maxUpdown),Float.valueOf(minUpdown),barMax,maxPreClose);
-            for (int i=0;i<itemCount;i++){
-
-                KLine model=arrList.get(startIndex+i);
-                Log.d("测试K","timeStamp:"+model.timeStamp+"   highp:"+model.highp+"  openp:"+model.openp+"   nowv:"+model.nowv+"   preClose:"+model.preClose+"   lowp:"+model.lowp);
+            Log.d("测试K",mStartIndex+":----------------:"+mStopIndex);
+            for (int i = mStartIndex; i <= mStopIndex; i++) {
+                float currentPointX = getX(i);
+                float pointX=0;
+                if(i<(arrList.size()-1)){
+                    pointX = getX(i+1);
+                }
+                Log.d("测试K","*----------------:"+(currentPointX-pointX)+"   currentPointX:"+currentPointX+"    pointX:"+pointX+"    I:"+i);
+                float lastX = i == 0 ? currentPointX : getX(i - 1);
+                KLine model=arrList.get(i);
                 float value=Float.valueOf(model.openp)/100;
                 float value1=Float.valueOf(model.nowv)/100;
-
                 float value2=Float.valueOf(model.lowp)/100;
                 float value3=Float.valueOf(model.highp)/100;
-
                 float v1,v2;
                 if(value>value1){
                     v2=value;
@@ -168,36 +183,28 @@ public class KLineCharView extends RelativeLayout implements View.OnClickListene
                 float limitH=(maxPoint-minPoint)/(lineH-0);
                 float y=(lineH-((v1-minPoint)/limitH))+clearanceHeight;
                 float y1=(lineH-((v2-minPoint)/limitH))+clearanceHeight;
-
                 float y2=(lineH-((value2-minPoint)/limitH))+clearanceHeight;
                 float y3=(lineH-((value3-minPoint)/limitH))+clearanceHeight;
-
                 if(y1==y){
                     y=y+1;
                 }
-
-                float x=(Float.valueOf(viewWidth)/Float.valueOf(this.itemCount))*i;
-                //x=x-itemClearanceWidth;
-                if(i!=0){
-                    startX=listX.get(i-1);
-                    //startY=listY.get(i-1);
-                }else {
-                    //startY=y;
-                }
-
-                canvas.drawRect(startX+2,y1, x, y, kLinePaint);
-                float x4=0;
-                if(i==0){
-                    x4= (itemW-2)/2;
-                }else {
-                    x4= x-((itemW-2)/2);
-                }
-                canvas.drawLine(x4,y2, x4, y3, kLinePaint);
-                listX.add(x);
+                float s1=columnSpace*0.2f;
+                canvas.drawRect(lastX+s1,y1, lastX+(columnSpace-s1*2), y, kLinePaint);
+                float s2= ((columnSpace-s1*2)-s1)/2;
+                //Log.d("测试K","*----------------s1:"+s1+"  s2:"+s2);
+                canvas.drawLine(lastX+s1+s2,y2, lastX+s1+s2, y3, kLinePaint);
             }
 
-
         }
+
+    }
+
+    public float getX(int position) {
+        if(mXs==null||mXs.size()<=0){
+            return 0;
+        }
+
+        return mXs.get(position);
     }
 
     //绘制表格
@@ -264,6 +271,17 @@ public class KLineCharView extends RelativeLayout implements View.OnClickListene
 
     public void  setData(ArrayList<KLine> list){
         this.arrList=list;
+        if (arrList != null&&arrList.size()>0) {
+            mItemCount=this.arrList.size();
+            mXs.clear();
+            for (int i = 0; i <= mItemCount; i++) {
+                float x=columnSpace * i;
+                mXs.add(x);
+            }
+            mDataLen = (mItemCount - 1) * columnSpace;
+            checkAndFixScrollX();
+            mTranslateX = mScrollX + (-mDataLen + viewWidth / mScaleX - columnSpace / 2);
+        }
         invalidate();
     }
 
@@ -362,94 +380,77 @@ public class KLineCharView extends RelativeLayout implements View.OnClickListene
     }
 
 
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
+
+
+    public int indexOfTranslateX(float translateX) {
+        return indexOfTranslateX(translateX, 0, mItemCount - 1);
     }
 
-    @Override
-    public void onShowPress(MotionEvent e) {
-        Log.d("测试K","-----------------------onShowPress:"+e.getAction());
+    public float xToTranslateX(float x) {
+        Log.d("测试K",mScrollX+":----------------mScaleX:"+mScaleX);
+        //return -mTranslateX + x / mScrollX;
+        return -mTranslateX + x / mScaleX;
     }
 
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        Log.d("测试K","-----------------------onSingleTapUp:"+e.getAction());
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d("测试K","-----------------------onScroll:MotionEvent1:"+e1.getAction()+"  MotionEvent2:"+e2.getAction()+"   X:"+distanceX+"     Y:"+distanceY);
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-        Log.d("测试K","-----------------------onLongPress:"+e.getAction());
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.d("测试K","-----------------------onFling:MotionEvent1:"+e1.getAction()+"  MotionEvent2:"+e2.getAction());
-        return false;
-    }
-
-    private float mScaleX=0;
-    private boolean touch=false,isLongPress = false,mMultipleTouch=false;
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        //return super.onTouchEvent(event);
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                touch = true;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (event.getPointerCount() == 1) {
-                    //长按之后移动
-                    if (isLongPress) {
-                        onLongPress(event);
-                    }
-                }
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-                isLongPress = false;
-                touch = false;
-                invalidate();
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                isLongPress = false;
-                touch = false;
-                invalidate();
-                break;
+    /**
+     * 二分查找当前值的index
+     * @param translateX
+     * @return
+     */
+    public int indexOfTranslateX(float translateX, int start, int end) {
+        if (end == start) {
+            return start;
         }
-        mMultipleTouch=event.getPointerCount()>1;
-        this.mDetector.onTouchEvent(event);
-        this.mScaleDetector.onTouchEvent(event);
-        return true;
+        if (end - start == 1) {
+            float startValue = getX(start);
+            float endValue = getX(end);
+            return Math.abs(translateX - startValue) < Math.abs(translateX - endValue) ? start : end;
+        }
+        int mid = start + (end - start) / 2;
+        float midValue = getX(mid);
+        if (translateX < midValue) {
+            return indexOfTranslateX(translateX, start, mid);
+        } else if (translateX > midValue) {
+            return indexOfTranslateX(translateX, mid, end);
+        } else {
+            return mid;
+        }
+    }
+
+    //onScrollChanged
+
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        mTranslateX = mScrollX + (-mDataLen + viewWidth / mScaleX - columnSpace / 2);
+    }
+
+    @Override
+    protected void onScaleChanged(float scale, float oldScale) {
+        checkAndFixScrollX();
+        mTranslateX = mScrollX + (-mDataLen + viewWidth / mScaleX - columnSpace / 2);
+        super.onScaleChanged(scale, oldScale);
+    }
+
+    @Override
+    public void onLeftSide() {
 
     }
 
     @Override
-    public boolean onScale(ScaleGestureDetector detector) {
-        float oldScale=mScaleX;
-        mScaleX *= detector.getScaleFactor();
-        Log.d("测试K","------------mScaleX:"+mScaleX);
-        return true;
+    public void onRightSide() {
+
     }
 
     @Override
-    public boolean onScaleBegin(ScaleGestureDetector detector) {
-        Log.d("测试K","-----------------------onScaleBegin:");
-        return false;
+    public int getMinScrollX() {
+        return -20;
     }
 
     @Override
-    public void onScaleEnd(ScaleGestureDetector detector) {
-        Log.d("测试K","-----------------------onScaleEnd:");
+    public int getMaxScrollX() {
+        return  Math.round((columnSpace / 2) - (-mDataLen + viewWidth / mScaleX - columnSpace / 2));
     }
+
 }
