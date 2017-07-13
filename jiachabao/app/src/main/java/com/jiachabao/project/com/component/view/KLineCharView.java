@@ -56,9 +56,9 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
 
     private float itemClearance=2;
     //每个Item宽度
-    private float itemWidth=0,itemClearanceWidth=0;
-    //一个格子显示多少个Item
-    private int itemCount=18;
+    private float itemClearanceWidth=0;
+
+    //private int itemCount=0;
     //控件宽高
     private  float viewWidth=0,viewHeight=0;
     private float barViewHeight=200,labelViewHeight=40,clearanceViewHeight=20,tabViewHeight=50;
@@ -77,13 +77,13 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
 
     private View viewTab;
     private int selectTabIndex=1;
-    private float maxPoint=0,minPoint=0,maxBar=0;
+    private float maxPoint=0,minPoint=0,maxBar=0,minBar=0;;
     private ArrayList<KLine> arrList;
     protected Paint mGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     //x轴的偏移量
     protected float mTranslateX = Float.MIN_VALUE;
     //item竖虚线间隔
-    protected int dottedLine=25;
+    protected int dottedLine=15;
     //间隔占整个item的比率
     private float itemInterval=0.1f;
 
@@ -93,6 +93,7 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
     //显示区域中X结束点在数组的位置
     protected int mStopIndex = 0;
     private List<Float> mXs=new ArrayList<Float>();
+    //Item的个数
     private int mItemCount=0;
     private float columnSpace=10;
     private float mDataLen;
@@ -112,33 +113,31 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
         viewTab.findViewById(R.id.tv_kdj_tab).setOnClickListener(this);
         viewTab.findViewById(R.id.tv_rsi_tab).setOnClickListener(this);
         addView(viewTab,new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        Log.d("测试K","itemWidth:"+itemWidth);
+
 
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         mStartIndex = indexOfTranslateX(xToTranslateX(0));
         mStopIndex = indexOfTranslateX(xToTranslateX(viewWidth));
-
-        canvas.save();
         drawGrid(canvas);
         drawText(canvas);
-        canvas.translate(mTranslateX * mScaleX, 0);
-        canvas.scale(mScaleX, 1);
+        canvas.save();
         drawValue(canvas);
-        canvas.restore();
+
     }
 
     private void drawValue(Canvas canvas) {
-        if(itemCount<=0){
+        if(mItemCount<=0){
             return;
         }
         if(arrList!=null){
             float lineH=lineHeight-(clearanceHeight*2);
             float minUpdown=0,maxUpdown=0,barMax=0,maxPreClose=0;
+            float s1=columnSpace*itemInterval;
+            float s2= ((columnSpace-s1*2)-s1)/2;
             for (int j = mStartIndex,k=0; j <= mStopIndex; j++,k++) {
                 KLine model=arrList.get(j);
                 float curp2=Float.valueOf(model.preClose)/100;
@@ -160,8 +159,11 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 maxPreClose=Math.max(curp2, maxPreClose);
                 barMax=Math.max(Float.valueOf(model.curVol), barMax);
             }
-            setMaxCurp(Float.valueOf(maxUpdown),Float.valueOf(minUpdown),barMax,maxPreClose);
 
+            setMaxCurp(Float.valueOf(maxUpdown),Float.valueOf(minUpdown),barMax,maxPreClose);
+            barMaxText(canvas);
+            canvas.translate(mTranslateX * mScaleX, 0);
+            canvas.scale(mScaleX, 1);
             // 虚线画笔
             float line= DisplayUtil.px2dip(getContext(),4);
             dottedPaint.setStyle(Paint.Style.STROKE);
@@ -169,15 +171,9 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
             dottedPaint.setStrokeWidth(1);
             PathEffect effects = new DashPathEffect(new float[] {line, line, line, line}, 1);
             dottedPaint.setPathEffect(effects);
-
             Log.d("测试K",mStartIndex+":----------------:"+mStopIndex);
             for (int i = mStartIndex; i <= mStopIndex; i++) {
                 float currentPointX = getX(i);
-                float pointX=0;
-                if(i<(arrList.size()-1)){
-                    pointX = getX(i+1);
-                }
-                Log.d("测试K","*----------------:"+(currentPointX-pointX)+"   currentPointX:"+currentPointX+"    pointX:"+pointX+"    I:"+i);
                 float lastX = i == 0 ? currentPointX : getX(i - 1);
                 KLine model=arrList.get(i);
                 float value=Float.valueOf(model.openp)/100;
@@ -195,7 +191,7 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 if(Float.valueOf(model.upDown)>=0){
                     kLinePaint.setColor(Color.RED);
                 }else {
-                    kLinePaint.setColor(Color.GREEN);
+                    kLinePaint.setColor(Color.parseColor("#1dbd7d"));
                 }
                 float limitH=(maxPoint-minPoint)/(lineH-0);
                 float y=(lineH-((v1-minPoint)/limitH))+clearanceHeight;
@@ -205,34 +201,42 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 if(y1==y){
                     y=y+1;
                 }
-                float s1=columnSpace*itemInterval;
-                canvas.drawRect(lastX+s1,y1, lastX+(columnSpace-s1*2), y, kLinePaint);
-                float s2= ((columnSpace-s1*2)-s1)/2;
+                //float s1=columnSpace*itemInterval;
+                //float s2= ((columnSpace-s1*2)-s1)/2;
                 //Log.d("测试K","*----------------s1:"+s1+"  s2:"+s2);
+                canvas.drawRect(lastX+s1,y1, lastX+(columnSpace-s1*2), y, kLinePaint);
                 canvas.drawLine(lastX+s1+s2,y2, lastX+s1+s2, y3, kLinePaint);
+                float barH=barHeight-tabHeight;
+                float limitBarH=(maxBar-minBar)/(barH-minBar);
+                float barY=barH-((Integer.parseInt(model.curVol)-minBar)/limitBarH);
+                barY=barY+(viewHeight-barH);
+                kLinePaint.setAlpha(200);
+                canvas.drawRect(lastX+s1,barY, lastX+(columnSpace-s1*2), viewHeight, kLinePaint);
+
                 if(i%dottedLine==0){
                     //横线虚线
                     Path path = new Path();
                     path.moveTo(lastX+s1+s2, 1);
                     path.lineTo(lastX+s1+s2,lineHeight);
                     canvas.drawPath(path,dottedPaint);
-
+                    textPaint.setStrokeWidth(1);
                     textPaint.setColor(gridColor);
                     textPaint.setTextSize(12f);
+
                     Rect rect = new Rect();
                     String time=dateTimeToString(model.timeStamp);
                     textPaint.getTextBounds(time, 0, 1, rect);
-                    canvas.drawText(time, lastX+s1+s2, lineHeight+clearanceHeight, textPaint);
+                    float timeW=(textPaint.measureText(time) / 2);
+                    canvas.drawText(time, lastX+s1+s2-timeW, lineHeight+clearanceHeight, textPaint);
 
                     Path path1 = new Path();
                     path1.moveTo(lastX+s1+s2, lineHeight+labelHeight+tabHeight);
                     path1.lineTo(lastX+s1+s2,viewHeight);
                     canvas.drawPath(path1,dottedPaint);
-
                 }
 
             }
-
+            canvas.restore();
         }
 
     }
@@ -318,6 +322,15 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
 
     }
 
+    private void barMaxText(Canvas canvas){
+        Rect rect = new Rect();
+        textPaint.getTextBounds(String.valueOf(maxBar), 0, 1, rect);
+        float paddingLeft=DisplayUtil.px2dip(mContext,5);
+        canvas.drawText(String.valueOf(maxBar), paddingLeft, lineHeight+labelHeight+tabHeight + rect.height()+paddingLeft, textPaint);
+        textPaint.setAlpha(200);
+        canvas.drawText("手", paddingLeft, viewHeight-paddingLeft, textPaint);
+    }
+
 
     public void  setData(ArrayList<KLine> list){
         this.arrList=list;
@@ -355,8 +368,6 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
         int h= MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         viewTab.measure(h,h);
         viewTab.setTranslationY(this.lineHeight+this.labelHeight+(this.tabHeight-viewTab.getMeasuredHeight())/2);
-        this.itemWidth= DisplayUtil.px2dip(getContext(),5)+itemClearanceWidth*2;
-        Log.d("测试K","W:"+(viewWidth)+"   H:"+h+"     ItemCount:"+(viewWidth/(itemWidth))+"    itemW:"+itemWidth);
     }
 
     @Override

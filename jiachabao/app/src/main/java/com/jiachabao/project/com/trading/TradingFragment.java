@@ -35,17 +35,17 @@ public class TradingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          view = inflater.inflate(R.layout.fragment_trading, container, false);
-//        textScrollView= (LineCharView)view.findViewById(R.id.tsv_view);
-//        ArrayList<String> list=new ArrayList<>();
-//        list.add("08:00");
-//        list.add("13:00");
-//        list.add("18:00");
-//        list.add("23:00");
-//        list.add("05:00");
-//        textScrollView.setLineCount(1260);
-//        textScrollView.setLabels(list);
-//
-//        initData();
+        textScrollView= (LineCharView)view.findViewById(R.id.tsv_view);
+        ArrayList<String> list=new ArrayList<>();
+        list.add("08:00");
+        list.add("13:00");
+        list.add("18:00");
+        list.add("23:00");
+        list.add("05:00");
+        textScrollView.setLineCount(1260);
+        textScrollView.setLabels(list);
+
+        initData();
 
         final ImageView imageView=(ImageView)view.findViewById(R.id.iv_view);
         final Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.img_animation);

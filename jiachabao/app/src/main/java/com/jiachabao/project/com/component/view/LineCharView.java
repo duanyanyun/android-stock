@@ -261,7 +261,7 @@ public class LineCharView extends RelativeLayout implements GestureDetector.OnGe
                     f = y + lineHeight+labelHeight;
                 }
                 linePaint.setAlpha(200);
-                canvas.drawLine(startX,f, x, viewHeight, linePaint);
+                canvas.drawRect(startX,f, x, viewHeight, linePaint);
                 arrX.add(x);
             }
         }

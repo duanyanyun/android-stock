@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".trading.TradingFragment">
-    <com.jiachabao.project.com.component.view.TextKLineCharView
+    <com.jiachabao.project.com.component.view.LineCharView
         android:id="@+id/tsv_view"
         android:background="@color/color_999999"
         android:layout_width="match_parent"
