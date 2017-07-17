@@ -135,7 +135,7 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
         }
         if(arrList!=null){
             float lineH=lineHeight-(clearanceHeight*2);
-            float minUpdown=0,maxUpdown=0,barMax=0,maxPreClose=0;
+            float minUpdown=0,maxUpdown=0,barMax=0,maxPreClose=0,upDownMax=0,updown=0;
             float s1=columnSpace*itemInterval;
             float s2= ((columnSpace-s1*2)-s1)/2;
             for (int j = mStartIndex,k=0; j <= mStopIndex; j++,k++) {
@@ -158,10 +158,27 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 maxUpdown=Math.max(value3, maxUpdown);
                 maxPreClose=Math.max(curp2, maxPreClose);
                 barMax=Math.max(Float.valueOf(model.curVol), barMax);
-            }
+                updown=Float.valueOf(model.upDown);
+                Log.d("测试K",model.timeStamp+":----------------updown:"+updown);
+                if(updown<0){
+                    updown=Math.abs(updown);
+                }
+                upDownMax=Math.max(updown, upDownMax);
 
+            }
+            switch (selectTabIndex){
+                case 1:
+                    barMaxText(canvas,"手",String.valueOf(barMax));
+                    break;
+                case 2:
+                    barMaxText(canvas,String.valueOf(-upDownMax),String.valueOf(upDownMax));
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
             setMaxCurp(Float.valueOf(maxUpdown),Float.valueOf(minUpdown),barMax,maxPreClose);
-            barMaxText(canvas);
             canvas.translate(mTranslateX * mScaleX, 0);
             canvas.scale(mScaleX, 1);
             // 虚线画笔
@@ -206,12 +223,18 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
                 //Log.d("测试K","*----------------s1:"+s1+"  s2:"+s2);
                 canvas.drawRect(lastX+s1,y1, lastX+(columnSpace-s1*2), y, kLinePaint);
                 canvas.drawLine(lastX+s1+s2,y2, lastX+s1+s2, y3, kLinePaint);
-                float barH=barHeight-tabHeight;
-                float limitBarH=(maxBar-minBar)/(barH-minBar);
-                float barY=barH-((Integer.parseInt(model.curVol)-minBar)/limitBarH);
-                barY=barY+(viewHeight-barH);
-                kLinePaint.setAlpha(200);
-                canvas.drawRect(lastX+s1,barY, lastX+(columnSpace-s1*2), viewHeight, kLinePaint);
+                switch (selectTabIndex){
+                    case 1:
+                        drawBarValue(canvas,model.curVol,lastX+s1,lastX+(columnSpace-s1*2));
+                        break;
+                    case 2:
+                        drawMACDValue(canvas,model.upDown,upDownMax,lastX+s1,lastX+(columnSpace-s1*2));
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                }
 
                 if(i%dottedLine==0){
                     //横线虚线
@@ -240,6 +263,37 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
         }
 
     }
+
+    private void drawBarValue(Canvas canvas,String vol,float x,float endX){
+        float barH=barHeight-tabHeight;
+        float limitBarH=(maxBar-minBar)/(barH-minBar);
+        float barY=barH-((Integer.parseInt(vol)-minBar)/limitBarH);
+        barY=barY+(viewHeight-barH);
+        kLinePaint.setAlpha(200);
+        canvas.drawRect(x,barY,endX, viewHeight, kLinePaint);
+
+    }
+
+    private void drawMACDValue(Canvas canvas,String vol,float upDownMax,float x,float endX){
+        float barH=barHeight-tabHeight;
+        float v=Float.parseFloat(vol);
+        barH=barH/2;
+        float limitBarH=(upDownMax-(-upDownMax))/(barH-(-upDownMax));
+        float barY=barH-((v-(-upDownMax))/limitBarH);
+        kLinePaint.setAlpha(200);
+        if(v>=0){
+            barY=barY+(viewHeight-(barH*2));
+            canvas.drawRect(x,barY,endX, viewHeight-barH, kLinePaint);
+        }else {
+            Log.d("测试K","--------------------barY:"+barY+"      upDownMax:"+upDownMax);
+            barY=(barH-barY)+(viewHeight-barH);
+            canvas.drawRect(x,viewHeight-barH,endX, barY, kLinePaint);
+        }
+
+
+
+    }
+
 
 
     public String dateTimeToString(String time){
@@ -322,13 +376,13 @@ public class KLineCharView extends ScrollAndScaleView implements View.OnClickLis
 
     }
 
-    private void barMaxText(Canvas canvas){
+    private void barMaxText(Canvas canvas,String text,String max){
         Rect rect = new Rect();
-        textPaint.getTextBounds(String.valueOf(maxBar), 0, 1, rect);
+        textPaint.getTextBounds(max, 0, 1, rect);
         float paddingLeft=DisplayUtil.px2dip(mContext,5);
-        canvas.drawText(String.valueOf(maxBar), paddingLeft, lineHeight+labelHeight+tabHeight + rect.height()+paddingLeft, textPaint);
+        canvas.drawText(max, paddingLeft, lineHeight+labelHeight+tabHeight + rect.height()+paddingLeft, textPaint);
         textPaint.setAlpha(200);
-        canvas.drawText("手", paddingLeft, viewHeight-paddingLeft, textPaint);
+        canvas.drawText(text, paddingLeft, viewHeight-paddingLeft, textPaint);
     }
 
 

@@ -69,7 +69,7 @@ public class LineCharView extends RelativeLayout implements GestureDetector.OnGe
     private boolean mMultipleTouch=false;
 
 
-    private ArrayList<String> mRowList;
+    private String[] mRowList;
     private ArrayList<Float> arrLine,arrBar;
     private int lineCount=0,selectedIndex=-1,priorSelectedIndex=-1;
 
@@ -153,30 +153,32 @@ public class LineCharView extends RelativeLayout implements GestureDetector.OnGe
         canvas.drawPath(path2,dottedPaint);
 
         //绘制虚线和labels
-        if(mRowList!=null&&mRowList.size()>0) {
+        if(mRowList!=null&&mRowList.length>0) {
             //绘制树虚线
-            float rowSpace1 = (viewWidth) / (mRowList.size()-1);
-            for(int i=0;i<mRowList.size()-1;i++){
-                Path path3 = new Path();
-                path3.moveTo(rowSpace1*i,0);
-                path3.lineTo(rowSpace1*i,lineHeight);
-                canvas.drawPath(path3,dottedPaint);
+            float rowSpace1 = (viewWidth) / (mRowList.length-1);
+            for(int i=0;i<mRowList.length-1;i++){
+                if(i!=0&&i!=mRowList.length-1){
+                    Path path3 = new Path();
+                    path3.moveTo(rowSpace1*i,0);
+                    path3.lineTo(rowSpace1*i,lineHeight);
+                    canvas.drawPath(path3,dottedPaint);
 
-                Path path4 = new Path();
-                path4.moveTo(rowSpace1*i,(lineHeight+labelHeight));
-                path4.lineTo(rowSpace1*i,viewHeight);
-                canvas.drawPath(path4,dottedPaint);
+                    Path path4 = new Path();
+                    path4.moveTo(rowSpace1*i,(lineHeight+labelHeight));
+                    path4.lineTo(rowSpace1*i,viewHeight);
+                    canvas.drawPath(path4,dottedPaint);
+                }
             }
             //底部时间段
             Rect rect = new Rect();
-            gridPaint.getTextBounds(mRowList.get(0), 0, 1, rect);
+            gridPaint.getTextBounds(mRowList[0], 0, 1, rect);
             float h= (labelHeight-rect.height())/2;
-            for (int i = 0; i < mRowList.size(); i++) {
-                String tab = mRowList.get(i);
+            for (int i = 0; i < mRowList.length; i++) {
+                String tab = mRowList[i];
                 float w;
                 if (i == 0) {
                     w = 0;
-                } else if (i == mRowList.size() - 1) {
+                } else if (i == mRowList.length - 1) {
                     w = rowSpace1 * i - gridPaint.measureText(tab);
                 } else {
                     w = rowSpace1 * i - (gridPaint.measureText(tab) / 2);
@@ -316,7 +318,7 @@ public class LineCharView extends RelativeLayout implements GestureDetector.OnGe
         invalidate();
     }
     //设置tab
-    public void setLabels(ArrayList<String> labels){
+    public void setLabels(String[] labels){
         this.mRowList=labels;
         invalidate();
     }

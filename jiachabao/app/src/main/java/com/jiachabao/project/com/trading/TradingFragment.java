@@ -36,14 +36,14 @@ public class TradingFragment extends Fragment {
         // Inflate the layout for this fragment
          view = inflater.inflate(R.layout.fragment_trading, container, false);
         textScrollView= (LineCharView)view.findViewById(R.id.tsv_view);
-        ArrayList<String> list=new ArrayList<>();
-        list.add("08:00");
-        list.add("13:00");
-        list.add("18:00");
-        list.add("23:00");
-        list.add("05:00");
-        textScrollView.setLineCount(1260);
-        textScrollView.setLabels(list);
+//        ArrayList<String> list=new ArrayList<>();
+//        list.add("08:00");
+//        list.add("13:00");
+//        list.add("18:00");
+//        list.add("23:00");
+//        list.add("05:00");
+//        textScrollView.setLineCount(1260);
+//        textScrollView.setLabels(list);
 
         initData();
 
@@ -89,6 +89,8 @@ public class TradingFragment extends Fragment {
                     barMax=Math.max(stock.curVolume, barMax);
                     updowns.add(Float.valueOf(stock.curVolume));
                 }
+                textScrollView.setLabels(result.getData().timeaxisText);
+                textScrollView.setLineCount(result.getData().timeaxisIndex[result.getData().timeaxisIndex.length-1]);
                 textScrollView.setMaxCurp(result.getData().highp,result.getData().lowp,0.56f,-0.69f,barMax,result.getData().preClose);
                 textScrollView.setData(curps);
                 textScrollView.setBarData(updowns);
